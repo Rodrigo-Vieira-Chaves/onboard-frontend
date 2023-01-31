@@ -3,5 +3,5 @@ interface ButtonProps {
 }
 
 export function Button(props: ButtonProps) {
-  return <button type='button'>{props.buttonText}</button>;
+  return <button type='submit'>{props.buttonText}</button>;
 }
