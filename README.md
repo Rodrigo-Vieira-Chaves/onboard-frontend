@@ -1,4 +1,4 @@
-Project's Name (pick one sunglasses)
-Project's Description
-Environment and tools *
-Steps to run and debug *
+Project's Name: Onboard - FrontEnd - React
+Project's Description: Project to learn React framework for frontend projects in TaqTile
+Environment and tools: NodeJs 16.10.0 with create-react-app
+Steps to run and debug: Just run "npm start"
