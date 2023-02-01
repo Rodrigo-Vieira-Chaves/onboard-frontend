@@ -1,7 +1,8 @@
 interface ButtonProps {
-  buttonText: string;
+  text: string;
+  loading: boolean;
 }
 
 export function Button(props: ButtonProps) {
-  return <button type='submit'>{props.buttonText}</button>;
+  return <button type='submit'>{props.loading ? 'Carregando' : props.text}</button>;
 }
