@@ -12,9 +12,11 @@ export function App() {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const [loginMutation, { data }] = useMutation(LOGIN_MUTATION);
+  const [loginMutation, { data, error }] = useMutation(LOGIN_MUTATION);
 
   useEffect(() => data && localStorage.setItem('token', data.login.token), [data]);
+
+  useEffect(() => error && alert(error), [error]);
 
   function onChangeEmail(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
