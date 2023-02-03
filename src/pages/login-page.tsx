@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import { Input } from '../components/Input';
 import { Title } from '../components/Title';
@@ -6,15 +7,22 @@ import { Button } from '../components/Button';
 import { LOGIN_MUTATION } from '../graphql/mutations';
 
 export function LoginPage() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
 
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const [loginMutation, { data, error }] = useMutation(LOGIN_MUTATION);
+  const [loginMutation, { data, loading, error }] = useMutation(LOGIN_MUTATION);
 
-  useEffect(() => data && localStorage.setItem('token', data.login.token), [data]);
+  useEffect(() => {
+    if (data) {
+      localStorage.setItem('token', data.login.token);
+      navigate('/main');
+    }
+  }, [data]);
 
   useEffect(() => error && alert(error), [error]);
 
@@ -68,7 +76,7 @@ export function LoginPage() {
         onChange={onChangePassword}
         error={passwordError}
       />
-      <Button buttonText='Entrar' />
+      <Button text='Entrar' loading={loading} />
     </form>
   );
 }
