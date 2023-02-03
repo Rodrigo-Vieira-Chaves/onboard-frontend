@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Input } from '../components/Input';
 import { Title } from '../components/Title';
 import { useMutation } from '@apollo/client';
-import { Button } from '../components/Button';
+import { SubmitButton } from '../components/SubmitButton';
 import { LOGIN_MUTATION } from '../graphql/mutations';
 
 export function LoginPage() {
@@ -76,7 +76,7 @@ export function LoginPage() {
         onChange={onChangePassword}
         error={passwordError}
       />
-      <Button text='Entrar' loading={loading} />
+      <SubmitButton text='Entrar' loading={loading} />
     </form>
   );
 }
