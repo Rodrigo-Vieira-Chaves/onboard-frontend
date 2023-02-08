@@ -1,7 +1,7 @@
+import { Button } from '../Button';
 import { MouseEventHandler } from 'react';
-import { ChangePageButton } from './ChangePageButton';
 
-interface PageProps {
+interface ListProps {
   itemsList: string[];
   hasNextPage: boolean;
   hasPreviousPage: boolean;
@@ -9,7 +9,7 @@ interface PageProps {
   onClickPreviousPage: MouseEventHandler<HTMLButtonElement>;
 }
 
-export function Page(props: PageProps) {
+export function List(props: ListProps) {
   return (
     <>
       <ul>
@@ -17,8 +17,8 @@ export function Page(props: PageProps) {
           <li key={index}>{item}</li>
         ))}
       </ul>
-      <ChangePageButton text='previous' disabled={!props.hasPreviousPage} onClick={props.onClickPreviousPage} />
-      <ChangePageButton text='next' disabled={!props.hasNextPage} onClick={props.onClickNextPage} />
+      <Button text='previous' type='button' disabled={!props.hasPreviousPage} onClick={props.onClickPreviousPage} />
+      <Button text='next' type='button' disabled={!props.hasNextPage} onClick={props.onClickNextPage} />
     </>
   );
 }
