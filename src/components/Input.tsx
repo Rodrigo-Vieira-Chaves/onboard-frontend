@@ -1,5 +1,5 @@
-import { FormContext } from './Form';
-import { useContext, useState } from 'react';
+import { useForm } from './Form';
+import { useState } from 'react';
 import { differenceInYears, isDate } from 'date-fns';
 
 export enum InputType {
@@ -36,15 +36,12 @@ export function Input(props: InputProps) {
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
 
-  const formContext = useContext(FormContext);
-
-  const [inputStates, setInputStates] = formContext.inputStates;
+  const { updateInputData, updateValidators } = useForm();
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     setError('');
     setInput(e.target.value);
-
-    setInputStates({ ...inputStates, [props.id]: e.target.value });
+    updateInputData(props.id, e.target.value);
   }
 
   function validate() {
@@ -57,7 +54,7 @@ export function Input(props: InputProps) {
     return isValid;
   }
 
-  formContext.validators[props.id] = validate;
+  updateValidators(props.id, validate);
 
   return (
     <div>

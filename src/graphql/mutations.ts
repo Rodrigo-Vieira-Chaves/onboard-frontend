@@ -1,5 +1,9 @@
 import { gql } from '@apollo/client';
 
+export interface LoginMutationResult {
+  login: { token: string };
+}
+
 export const LOGIN_MUTATION = gql`
   mutation Mutation($data: LoginInput!) {
     login(data: $data) {

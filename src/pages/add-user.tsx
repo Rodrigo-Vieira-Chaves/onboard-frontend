@@ -1,50 +1,42 @@
-import { useEffect, useState } from 'react';
 import { Title } from '../components/Title';
 import { useMutation } from '@apollo/client';
 import { Button } from '../components/Button';
 import { useNavigate } from 'react-router-dom';
-import { DropMenu } from '../components/DropMenu';
-import { Form, States } from '../components/Form';
+import { Form, InputsData } from '../components/Form';
 import { Input, InputType } from '../components/Input';
 import { CREATE_USER_MUTATION } from '../graphql/mutations';
+import { DropMenu } from '../components/DropMenu';
 
 export function AddUser() {
   const navigate = useNavigate();
-  const [inputStates, setInputStates] = useState<States>({});
 
-  const [createUserMutation, { data, error }] = useMutation(CREATE_USER_MUTATION);
+  function onCompleted() {
+    navigate('/main');
+  }
 
-  useEffect(() => {
-    if (data) {
-      navigate('/main');
-    }
-  }, [data]);
+  function onError(error: any) {
+    alert(error);
+  }
 
-  useEffect(() => error && alert(error), [error]);
+  const [createUserMutation] = useMutation(CREATE_USER_MUTATION, { onCompleted, onError });
 
-  function onSubmit() {
+  function onSubmit(inputsData: InputsData) {
     createUserMutation({
       variables: {
         data: {
-          birthDate: inputStates['birthDateInput'],
-          email: inputStates['emailInput'],
-          password: inputStates['passwordInput'],
-          phone: inputStates['phoneInput'],
-          name: inputStates['nameInput'],
-          role: inputStates['rolesInput'],
+          birthDate: inputsData['birthDateInput'],
+          email: inputsData['emailInput'],
+          password: inputsData['passwordInput'],
+          phone: inputsData['phoneInput'],
+          name: inputsData['nameInput'],
+          role: inputsData['rolesInput'],
         },
       },
     });
   }
 
   return (
-    <Form
-      action='#'
-      method='post'
-      onSubmit={onSubmit}
-      shouldValidateForms={true}
-      inputStates={[inputStates, setInputStates]}
-    >
+    <Form onSubmit={onSubmit}>
       <Title titleText='Preencha os dados do novo usuário' />
       <Input id='emailInput' labelText='E-mail' inputType={InputType.EMAIL} errorMessage='Invalid Email' />
       <Input id='passwordInput' labelText='Senha' inputType={InputType.PASSWORD} errorMessage='Invalid Password' />
@@ -63,7 +55,7 @@ export function AddUser() {
           { value: 'user', option: 'user' },
           { value: 'admin', option: 'admin' },
         ]}
-        inputStates={[inputStates, setInputStates]}
+        errorMessage='Invalid Role'
       ></DropMenu>
       <Button text='Add User' type='submit' />
     </Form>

@@ -1,25 +1,34 @@
-import { cloneElement, createContext, FormEvent } from 'react';
+import { cloneElement, createContext, useContext } from 'react';
 
-export type States = { [id: string]: string };
-export type Validators = { [id: string]: () => boolean };
-export type InputStates = [States, React.Dispatch<React.SetStateAction<States>>];
+type Validators = { [id: string]: () => boolean };
+export type InputsData = { [id: string]: string };
+
+const validators: Validators = {};
+const inputsData: InputsData = {};
 
 interface FormProps {
-  action: string;
-  method: string;
   children: JSX.Element[];
-  inputStates: InputStates;
-  shouldValidateForms?: boolean;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  onSubmit: (inputsData: InputsData) => void;
 }
 
-export const FormContext = createContext<{ validators: Validators; inputStates: InputStates }>({} as any);
+const FormContext = createContext({ validators, inputsData });
+
+export function useForm() {
+  const { validators, inputsData } = useContext(FormContext);
+
+  const updateInputData = (inputId: string, data: string) => {
+    inputsData[inputId] = data;
+  };
+
+  const updateValidators = (inputId: string, validator: () => boolean) => {
+    validators[inputId] = validator;
+  };
+
+  return { updateInputData, updateValidators, inputsData };
+}
 
 export function Form(props: FormProps) {
-  const validators: Validators = {};
-
-  function validateForms(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  function validateForms() {
     let areInputsValid = true;
 
     for (const key in validators) {
@@ -32,16 +41,10 @@ export function Form(props: FormProps) {
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (props.shouldValidateForms ? validateForms(e) : true) {
-      return props.onSubmit(e);
+    if (validateForms()) {
+      return props.onSubmit(inputsData);
     }
   }
 
-  return (
-    <FormContext.Provider value={{ validators, inputStates: props.inputStates }}>
-      <form action={props.action} method={props.method} onSubmit={onSubmit}>
-        {props.children.map((child, index) => cloneElement(child, { key: index }))}
-      </form>
-    </FormContext.Provider>
-  );
+  return <form onSubmit={onSubmit}>{props.children.map((child, index) => cloneElement(child, { key: index }))}</form>;
 }

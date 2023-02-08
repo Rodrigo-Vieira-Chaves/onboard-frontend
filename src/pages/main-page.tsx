@@ -12,22 +12,12 @@ export function MainPage() {
 
   const [offset, setOffset] = useState(0);
 
-  const { data, loading, error } = useQuery<UsersQueryResult>(USERS_QUERY, {
-    variables: {
-      data: {
-        offset,
-        limit: USERS_QUERY_LIMIT,
-      },
-    },
-  });
-
-  if (error) {
+  function onError() {
     navigate('/');
   }
 
-  if (loading) {
-    return <p>Carregando</p>;
-  }
+  const variables = { data: { offset, limit: USERS_QUERY_LIMIT } };
+  const { data } = useQuery<UsersQueryResult>(USERS_QUERY, { variables, onError });
 
   if (data) {
     return (
@@ -46,5 +36,5 @@ export function MainPage() {
     );
   }
 
-  return <></>;
+  return <p>Carregando</p>;
 }
