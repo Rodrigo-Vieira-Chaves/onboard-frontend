@@ -1,82 +1,36 @@
 import { useNavigate } from 'react-router';
-import { useEffect, useState } from 'react';
-import { Input } from '../components/Input';
 import { Title } from '../components/Title';
 import { useMutation } from '@apollo/client';
-import { SubmitButton } from '../components/SubmitButton';
-import { LOGIN_MUTATION } from '../graphql/mutations';
+import { Button } from '../components/Button';
+import { Form, InputsData } from '../components/Form';
+import { Input, InputType } from '../components/Input';
+import { LoginMutationResult, LOGIN_MUTATION } from '../graphql/mutations';
 
 export function LoginPage() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
-
-  const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-
-  const [loginMutation, { data, loading, error }] = useMutation(LOGIN_MUTATION);
-
-  useEffect(() => {
-    if (data) {
-      localStorage.setItem('token', data.login.token);
-      navigate('/main');
-    }
-  }, [data]);
-
-  useEffect(() => error && alert(error), [error]);
-
-  function onChangeEmail(e: React.ChangeEvent<HTMLInputElement>) {
-    setEmail(e.target.value);
-    setEmailError('');
+  function onCompleted(data: LoginMutationResult) {
+    localStorage.setItem('token', data.login.token);
+    navigate('/main');
   }
 
-  function onChangePassword(e: React.ChangeEvent<HTMLInputElement>) {
-    setPassword(e.target.value);
-    setPasswordError('');
+  function onError(error: any) {
+    alert(error);
   }
 
-  function validateForm(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  const [loginMutation, { loading }] = useMutation(LOGIN_MUTATION, { onCompleted, onError });
 
-    const emailTest = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email);
-    const passwordTest = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/g.test(password);
-
-    if (!emailTest) {
-      setEmailError('Email invalid');
-    }
-
-    if (!passwordTest) {
-      setPasswordError('Password invalid');
-    }
-
-    return emailTest && passwordTest;
+  function onSubmit(inputsData: InputsData) {
+    const variables = { data: { email: inputsData['emailInput'], password: inputsData['passwordInput'] } };
+    loginMutation({ variables });
   }
 
   return (
-    <form
-      action='#'
-      method='post'
-      onSubmit={(e) => validateForm(e) && loginMutation({ variables: { data: { email, password } } })}
-    >
+    <Form onSubmit={onSubmit}>
       <Title titleText='Bem-vindo(a) à Taqtile!' />
-      <Input
-        id='emailInput'
-        labelText='E-mail'
-        inputType='email'
-        required={true}
-        onChange={onChangeEmail}
-        error={emailError}
-      />
-      <Input
-        id='passwordInput'
-        labelText='Senha'
-        inputType='password'
-        required={true}
-        onChange={onChangePassword}
-        error={passwordError}
-      />
-      <SubmitButton text='Entrar' loading={loading} />
-    </form>
+      <Input id='emailInput' labelText='E-mail' inputType={InputType.EMAIL} errorMessage='Invalid Email' />
+      <Input id='passwordInput' labelText='Senha' inputType={InputType.PASSWORD} errorMessage='Invalid Password' />
+      <Button text={loading ? 'Carregando' : 'Entrar'} type='submit' />
+    </Form>
   );
 }
