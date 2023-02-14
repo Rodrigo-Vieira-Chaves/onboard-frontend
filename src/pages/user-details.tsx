@@ -1,8 +1,6 @@
-import { Form } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { useLocation } from 'react-router';
 import { Title } from '../components/Title';
-import { Input, InputType } from '../components/Input';
 import { FindUserByIdResult, FIND_USER_BY_ID } from '../graphql/queries';
 
 export function UserDetails() {
