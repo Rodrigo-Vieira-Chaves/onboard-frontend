@@ -30,6 +30,8 @@ interface InputProps {
   inputType: InputType;
   errorMessage: string;
   required?: boolean;
+  value?: string;
+  readonly?: boolean;
 }
 
 export function Input(props: InputProps) {
@@ -59,7 +61,14 @@ export function Input(props: InputProps) {
   return (
     <div>
       <label htmlFor={props.id}>{props.labelText}</label>
-      <input id={props.id} type={props.inputType} required={props.required ?? true} onChange={onChange} />
+      <input
+        id={props.id}
+        type={props.inputType}
+        required={props.required ?? true}
+        value={props.value}
+        readOnly={props.readonly}
+        onChange={onChange}
+      />
       <p>{error}</p>
     </div>
   );

@@ -23,7 +23,10 @@ export function MainPage() {
     return (
       <>
         <List
-          itemsList={data.users.nodes.map((user) => `Name: ${user.name} ---- Email: ${user.email}`)}
+          itemsList={data.users.nodes.map((user) => ({
+            id: user.id,
+            item: `Name: ${user.name} ---- Email: ${user.email}`,
+          }))}
           hasNextPage={data.users.pageInfo.hasNextPage}
           hasPreviousPage={data.users.pageInfo.hasPreviousPage}
           onClickNextPage={() => setOffset(offset + USERS_QUERY_LIMIT)}

@@ -4,6 +4,9 @@ interface User {
   id: string;
   name: string;
   email: string;
+  birthDate: string;
+  phone: string;
+  role: string;
 }
 
 export interface UsersQueryResult {
@@ -19,13 +22,17 @@ export interface UsersQueryResult {
   };
 }
 
+export interface FindUserByIdResult {
+  user: User;
+}
+
 export const USERS_QUERY = gql`
   query Users($data: PageInput) {
     users(data: $data) {
       nodes {
+        id
         name
         email
-        id
       }
       pageInfo {
         hasNextPage
@@ -34,6 +41,19 @@ export const USERS_QUERY = gql`
         offset
       }
       count
+    }
+  }
+`;
+
+export const FIND_USER_BY_ID = gql`
+  query User($userId: ID) {
+    user(id: $userId) {
+      id
+      email
+      birthDate
+      name
+      phone
+      role
     }
   }
 `;

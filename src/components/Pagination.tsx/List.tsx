@@ -1,8 +1,9 @@
 import { Button } from '../Button';
 import { MouseEventHandler } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface ListProps {
-  itemsList: string[];
+  itemsList: { id: string; item: string }[];
   hasNextPage: boolean;
   hasPreviousPage: boolean;
   onClickNextPage: MouseEventHandler<HTMLButtonElement>;
@@ -10,11 +11,15 @@ interface ListProps {
 }
 
 export function List(props: ListProps) {
+  const navigate = useNavigate();
+
   return (
     <>
       <ul>
         {props.itemsList.map((item, index) => (
-          <li key={index}>{item}</li>
+          <li key={index} onClick={() => navigate('/userDetails', { state: item.id })}>
+            {item.item}
+          </li>
         ))}
       </ul>
       <Button text='previous' type='button' disabled={!props.hasPreviousPage} onClick={props.onClickPreviousPage} />
