@@ -1,6 +1,7 @@
 import { useForm } from './Form';
 import { useState } from 'react';
 import { differenceInYears, isDate } from 'date-fns';
+import styled from 'styled-components';
 
 export enum InputType {
   EMAIL = 'email',
@@ -34,6 +35,31 @@ interface InputProps {
   readonly?: boolean;
 }
 
+const StyledDiv = styled.div`
+  display: flex;
+  width: 240px;
+  flex-direction: column;
+`;
+
+const StyledLabel = styled.label`
+  font-size: 12px;
+  font-weight: regular;
+  color: #777777;
+  margin-bottom: 12px;
+`;
+
+const StyledInput = styled.input`
+  border: 1px solid;
+  color: #777777;
+`;
+
+const StyledParagraph = styled.p`
+  font-size: 12px;
+  font-weight: regular;
+  color: red;
+  margin-top: 8px;
+`;
+
 export function Input(props: InputProps) {
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
@@ -59,9 +85,9 @@ export function Input(props: InputProps) {
   updateValidators(props.id, validate);
 
   return (
-    <div>
-      <label htmlFor={props.id}>{props.labelText}</label>
-      <input
+    <StyledDiv>
+      <StyledLabel htmlFor={props.id}>{props.labelText}</StyledLabel>
+      <StyledInput
         id={props.id}
         type={props.inputType}
         required={props.required ?? true}
@@ -69,7 +95,7 @@ export function Input(props: InputProps) {
         readOnly={props.readonly}
         onChange={onChange}
       />
-      <p>{error}</p>
-    </div>
+      <StyledParagraph>{error}</StyledParagraph>
+    </StyledDiv>
   );
 }
