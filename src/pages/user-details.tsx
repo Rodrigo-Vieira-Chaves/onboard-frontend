@@ -17,49 +17,14 @@ export function UserDetails() {
 
   if (data) {
     return (
-      <Form>
+      <>
         <Title titleText='Detalhes de Usuário' />
-        <Input
-          id='emailInput'
-          labelText='E-mail'
-          inputType={InputType.EMAIL}
-          errorMessage='Invalid Email'
-          value={data.user.email}
-          readonly={true}
-        />
-        <Input
-          id='nameInput'
-          labelText='Nome'
-          inputType={InputType.TEXT}
-          errorMessage='Invalid Name'
-          value={data.user.name}
-          readonly={true}
-        />
-        <Input
-          id='phoneInput'
-          labelText='Telefone'
-          inputType={InputType.PHONE}
-          errorMessage='Invalid Phone Number'
-          value={data.user.phone}
-          readonly={true}
-        />
-        <Input
-          id='birthDateInput'
-          labelText='Data de Nascimento'
-          inputType={InputType.BIRTHDATE}
-          errorMessage='Invalid BirthDate'
-          value={data.user.birthDate}
-          readonly={true}
-        />
-        <Input
-          id='roleInput'
-          labelText='Role'
-          inputType={InputType.TEXT}
-          errorMessage='Invalid Role'
-          value={data.user.role}
-          readonly={true}
-        />
-      </Form>
+        <p>Email: {data.user.email}</p>
+        <p>Nome: {data.user.name}</p>
+        <p>Telefone: {data.user.phone}</p>
+        <p>Data de Nascimento: {data.user.birthDate}</p>
+        <p>Role: {data.user.role}</p>
+      </>
     );
   }
 
